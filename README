@@ -1,0 +1,11 @@
+Colocar isso no banco so pra testar
+
+CREATE TABLE sinais_morse (
+    id INT PRIMARY KEY,
+    sinal VARCHAR(5) NOT NULL
+);
+
+INSERT INTO sinais_morse (id, sinal) VALUES 
+(1, '...'), 
+(2, '---'), 
+(3, '.-');
