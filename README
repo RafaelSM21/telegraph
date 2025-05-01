@@ -1,11 +1,7 @@
 Colocar isso no banco so pra testar
 
 CREATE TABLE sinais_morse (
-    id INT PRIMARY KEY,
-    sinal VARCHAR(5) NOT NULL
+    id SERIAL PRIMARY KEY,
+    sinal VARCHAR(10) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-
-INSERT INTO sinais_morse (id, sinal) VALUES 
-(1, '...'), 
-(2, '---'), 
-(3, '.-');
