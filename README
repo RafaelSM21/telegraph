@@ -3,5 +3,16 @@ Colocar isso no banco so pra testar
 CREATE TABLE sinais_morse (
     id SERIAL PRIMARY KEY,
     sinal VARCHAR(10) NOT NULL,
+    letra VARCHAR(1) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+INSERT INTO sinais_morse (sinal, letra) VALUES
+('...', 'S'),
+('---', 'O'),
+('.--.', 'P'),
+('....', 'H'),
+('..', 'I'),
+('-.-', 'K'),
+('.', 'E'),
+('-.--', 'Y');
