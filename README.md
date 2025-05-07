@@ -5,7 +5,7 @@
 <h1 align="center">📡 Projeto Telégrafo com ESP32, Node.js e PostgreSQL</h1>
 
 <p align="center">
-  <a href="#sobre">Sobre</a> •  
+  <a href="#sobre">Visão Geral</a> •  
   <a href="#tecnologias">Tecnologias</a> •  
   <a href="#fluxo">Fluxo</a> •  
   <a href="#execucao">Como Executar</a> •  
@@ -16,8 +16,12 @@
 
 ---
 
+<span id="sobre">
+
 ## 📌 Visão Geral  
-Protótipo funcional de um sistema de comunicação Morse moderno que integra:  
+
+O Projeto Telégrafo utiliza o microcontrolador ESP32 e três botões físicos para emular o envio de mensagens em código Morse, transmitindo sinais por meio de comunicação serial via USB. Um servidor Node.js recebe essas sequências, converte-as automaticamente em texto legível e persiste tanto o código Morse quanto sua tradução em um banco de dados PostgreSQL. Por fim, uma interface web em tempo real exibe o histórico de mensagens, fornecendo uma experiência interativa e educacional sobre os princípios da telegrafia clássica atualizados para tecnologias modernas.
+
 - **Hardware**: ESP32 com 3 botões físicos  
 - **Backend**: Node.js para comunicação serial  
 - **Banco de Dados**: PostgreSQL para armazenamento  
@@ -59,7 +63,7 @@ Protótipo funcional de um sistema de comunicação Morse moderno que integra:
 
 ### Arduíno montado
 
-<img src="" alt="ESP32" />
+<img src="https://github.com/RafaelSM21/telegraph/blob/main/assets/telegraph.jpg" alt="Telégrafo" />
 
 ### Instalação  
 ```bash
