@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <title>Mensagens em Código Morse</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: #121212;
+      color: #f0f0f0;
+      padding: 2rem;
+      min-height: 100vh;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 2rem;
+      color: #00ffc8;
+      font-size: 2.5rem;
+    }
+
+    ul {
+      list-style: none;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 0;
+    }
+
+    li {
+      background: #1f1f1f;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      border-left: 5px solid #00ffc8;
+      border-radius: 6px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
+      font-size: 1.2rem;
+      transition: transform 0.2s ease;
+    }
+
+    li:hover {
+      transform: translateX(5px);
+    }
+
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 2rem;
+      }
+
+      li {
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>Mensagens Decodificadas</h1>
+  <ul id="lista">Carregando...</ul>
+
+  <script>
+    fetch('http://localhost:3000/mensagens')
+      .then(res => res.json())
+      .then(data => {
+        const lista = document.getElementById('lista');
+        lista.innerHTML = "";
+
+        if (data.length === 0) {
+          lista.innerHTML = "<li>Nenhuma mensagem encontrada.</li>";
+          return;
+        }
+
+        data.forEach(msg => {
+          const item = document.createElement('li');
+          item.textContent = `[${msg.morse}] → ${msg.texto}`;
+          lista.appendChild(item);
+        });
+      })
+      .catch(err => {
+        console.error('Erro ao buscar mensagens:', err);
+        document.getElementById('lista').innerHTML = "<li>Erro ao carregar mensagens.</li>";
+      });
+  </script>
+</body>
+</html>
