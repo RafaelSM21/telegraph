@@ -1,8 +1,127 @@
-CREATE DATABASE morse;
-\c morse
+📡 Projeto Telégrafo com ESP32, Node.js e PostgreSQL
+Badge Badge Badge Badge
+
+📌 Visão Geral
+Protótipo funcional de um manipulador de código Morse utilizando:
+
+Hardware: ESP32 com 3 botões físicos
+
+Backend: Node.js com comunicação serial
+
+Banco de Dados: PostgreSQL para armazenamento
+
+Interface Web: Visualização das mensagens traduzidas
+
+🛠️ Componentes do Sistema
+🔌 Hardware (ESP32)
+cpp
+// Exemplo simplificado do código do ESP32
+void setup() {
+  Serial.begin(9600);
+  pinMode(BOTAO_PONTO, INPUT);
+  pinMode(BOTAO_TRACO, INPUT);
+  pinMode(BOTAO_ESPACO, INPUT);
+}
+🌐 Backend (Node.js)
+javascript
+// Exemplo de trecho do servidor Node.js
+const { SerialPort } = require('serialport');
+const port = new SerialPort({ path: 'COM3', baudRate: 9600 });
+
+port.on('data', (data) => {
+  const morse = data.toString();
+  const texto = traduzMorse(morse);
+  salvarNoBanco(morse, texto);
+});
+🗃️ Banco de Dados (PostgreSQL)
+sql
+-- Estrutura da tabela (já incluída no relatório)
 CREATE TABLE mensagens (
   id SERIAL PRIMARY KEY,
   morse TEXT NOT NULL,
   texto TEXT NOT NULL,
   data TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+📋 Fluxo do Sistema
+Entrada Física: Usuário pressiona botões no ESP32
+
+Botão 1: Ponto (.)
+
+Botão 2: Traço (-)
+
+Botão 3: Espaço (entre letras) ou Envio (segurado)
+
+Comunicação Serial: ESP32 envia código Morse via USB
+
+Processamento: Node.js recebe e traduz para texto
+
+Armazenamento: Dados salvos no PostgreSQL
+
+Visualização: Interface web mostra histórico de mensagens
+
+🚀 Como Executar o Projeto
+Pré-requisitos
+ESP32 com firmware instalado
+
+Node.js v18+
+
+PostgreSQL 14+
+
+Python 3.8+ (para scripts auxiliares)
+
+Instalação
+bash
+# Clone o repositório
+git clone https://github.com/seu-usuario/telegrafo-morse.git
+cd telegrafo-morse
+
+# Instale as dependências do Node.js
+npm install
+
+# Configure o banco de dados (PostgreSQL)
+createdb morse
+psql morse < schema.sql
+Configuração
+Edite config.json com suas portas e credenciais
+
+Conecte o ESP32 via USB
+
+Inicie o servidor:
+
+bash
+node server.js
+🌐 Interface Web
+Acesse http://localhost:3000 para:
+
+Visualizar mensagens recentes
+
+Ver histórico completo
+
+Exportar dados em CSV
+
+Diagrama de Arquitetura
+
+📊 Estrutura do Banco de Dados
+Coluna	Tipo	Descrição
+id	SERIAL	Chave primária
+morse	TEXT	Código Morse original
+texto	TEXT	Texto traduzido
+data	TIMESTAMP	Data/hora do registro
+🤝 Como Contribuir
+Faça um fork do projeto
+
+Crie uma branch para sua feature (git checkout -b feature/nova-feature)
+
+Commit suas mudanças (git commit -m 'Adiciona nova feature')
+
+Push para a branch (git push origin feature/nova-feature)
+
+Abra um Pull Request
+
+📄 Licença
+Distribuído sob a licença MIT. Veja LICENSE para mais informações.
+
+✉️ Contato
+Guilherme Teixeira - guilherme@exemplo.com
+
+Rafael Soares - rafael@exemplo.com
