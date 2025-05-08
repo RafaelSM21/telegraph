@@ -98,6 +98,7 @@ Acesse: http://localhost:3000
 |---------------------|-------------------|------------------------------------------------------------------------|
 | Guilherme Teixeira  | Hardware / ESP32  | [GuilhermeTeixeira](https://github.com/GuilhermeCardoso0)              |
 | Rafael Soares       | Backend / Node.js | [RafaelSoares](https://github.com/RafaelSM21)                        |
+| Lucas Assis       | Backend / Node.js | [Lucasassis](https://github.com/Lucassis3)                        |
 
 ---
 
