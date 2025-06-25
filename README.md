@@ -2,7 +2,7 @@
 
 <div>
 
-<h1 align="center">📡 Projeto Telégrafo com ESP32, Node.js e PostgreSQL</h1>
+<h1 align="center">📡 Projeto Telégrafo com ESP32, MQTT, Node.js e PostgreSQL</h1>
 
 <p align="center">
   <a href="#sobre">Visão Geral</a> •  
@@ -20,12 +20,13 @@
 
 ## 📌 Visão Geral  
 
-O Projeto Telégrafo utiliza o microcontrolador ESP32 e três botões físicos para emular o envio de mensagens em código Morse, transmitindo sinais por meio de comunicação serial via USB. Um servidor Node.js recebe essas sequências, converte-as automaticamente em texto legível e persiste tanto o código Morse quanto sua tradução em um banco de dados PostgreSQL. Por fim, uma interface web em tempo real exibe o histórico de mensagens, fornecendo uma experiência interativa e educacional sobre os princípios da telegrafia clássica atualizados para tecnologias modernas.
+O Projeto Telégrafo utiliza o microcontrolador ESP32 e três botões físicos para emular o envio de mensagens em código Morse, transmitindo sinais por meio do protocolo **MQTT**. Um servidor **Node.js** recebe essas sequências, converte-as automaticamente em texto legível com base na codificação Morse, e persiste tanto o código bruto quanto a tradução em um banco de dados **PostgreSQL**. Por fim, uma interface web leve em HTML exibe o histórico das últimas mensagens recebidas.
 
 - **Hardware**: ESP32 com 3 botões físicos  
-- **Backend**: Node.js para comunicação serial  
-- **Banco de Dados**: PostgreSQL para armazenamento  
-- **Interface Web**: Visualização em tempo real das mensagens  
+- **Transmissão**: Sinais enviados via MQTT  
+- **Backend**: Node.js + Prisma para decodificação e armazenamento  
+- **Banco de Dados**: PostgreSQL  
+- **Interface Web**: HTML/CSS puro para exibição em tempo real  
 
 ---
 
@@ -34,8 +35,10 @@ O Projeto Telégrafo utiliza o microcontrolador ESP32 e três botões físicos p
 ## 🛠️ Tecnologias Utilizadas  
 
 <img src="https://img.shields.io/badge/ESP32-CED4DA?style=for-the-badge&logo=espressif&logoColor=FF0000" alt="ESP32" />  
+<img src="https://img.shields.io/badge/MQTT-CED4DA?style=for-the-badge&logo=eclipsemosquitto&logoColor=660066" alt="MQTT" />  
 <img src="https://img.shields.io/badge/Node.js-CED4DA?style=for-the-badge&logo=nodedotjs&logoColor=339933" alt="Node.js" />  
 <img src="https://img.shields.io/badge/PostgreSQL-CED4DA?style=for-the-badge&logo=postgresql&logoColor=336791" alt="PostgreSQL" />  
+<img src="https://img.shields.io/badge/Prisma-CED4DA?style=for-the-badge&logo=prisma&logoColor=2D3748" alt="Prisma" />  
 <img src="https://img.shields.io/badge/HTML5-CED4DA?style=for-the-badge&logo=html5&logoColor=E34F26" alt="HTML5" />  
 <img src="https://img.shields.io/badge/CSS3-CED4DA?style=for-the-badge&logo=css3&logoColor=1572B6" alt="CSS3" />  
 
@@ -44,11 +47,13 @@ O Projeto Telégrafo utiliza o microcontrolador ESP32 e três botões físicos p
 <span id="fluxo">
 
 ## 📋 Fluxo do Sistema  
-1. **Entrada Física:** Usuário pressiona botões no ESP32 para gerar sinais Morse.  
-2. **Comunicação Serial:** Sinais enviados via USB para o servidor Node.js.  
-3. **Processamento:** Node.js converte os sinais em texto.  
-4. **Armazenamento:** Mensagens salvas no PostgreSQL.  
-5. **Visualização:** Interface web exibe as mensagens em tempo real.  
+
+1. **Entrada Física:** O usuário pressiona botões conectados ao ESP32:
+   - `.` (ponto), `-` (traço), `|` (fim da palavra).
+2. **Transmissão via MQTT:** Os sinais são enviados para um broker local (Mosquitto).
+3. **Processamento no Backend:** O servidor Node.js recebe os sinais, acumula os caracteres até receber `|`, e então decodifica para texto.
+4. **Armazenamento:** O backend salva tanto o código Morse quanto o texto traduzido no PostgreSQL.
+5. **Visualização Web:** Um frontend simples exibe as últimas mensagens armazenadas.
 
 ---
 
@@ -57,38 +62,44 @@ O Projeto Telégrafo utiliza o microcontrolador ESP32 e três botões físicos p
 ## 🚀 Como Executar  
 
 ### Pré-requisitos  
-- ESP32 com firmware instalado  
+
+- ESP32 com código carregado via Arduino IDE  
 - Node.js v18+  
 - PostgreSQL 14+  
+- Mosquitto MQTT Broker (`sudo apt install mosquitto`)  
 
-### Arduíno montado
+### Circuito ESP32
+
+- 3 botões conectados aos pinos GPIO 12, 14 e 27  
+- Cada botão deve ligar o pino ao GND  
+- Lógica com `INPUT_PULLUP` ativado no ESP32  
 
 <img src="https://github.com/RafaelSM21/telegraph/blob/main/assets/telegraph.jpg" alt="Telégrafo" />
 
 ### Instalação  
+
 ```bash
-# Clone o repositório
+# Clone o projeto
 git clone https://github.com/RafaelSM21/telegraph.git
-cd telegraph
+cd telegraph/backend
 
 # Instale dependências
 npm install
 
-# Configure o banco de dados
-CREATE DATABASE morse;
-\c morse
-CREATE TABLE mensagens (
-  id SERIAL PRIMARY KEY,
-  morse TEXT NOT NULL,
-  texto TEXT NOT NULL,
-  data TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+# Configure o banco de dados PostgreSQL
+npx prisma migrate dev --name init
 
-# Inicie o servidor
+# Inicie o Mosquitto (broker MQTT)
+sudo systemctl start mosquitto
+
+# Inicie o backend
 npm run dev
-
-Acesse: http://localhost:3000
 ```
+
+Acesse a interface em: [http://localhost:3000](http://localhost:3000)  
+Ela exibe as últimas mensagens traduzidas do código Morse.
+
+---
 
 <span id="equipe"></span>
 
@@ -96,9 +107,9 @@ Acesse: http://localhost:3000
 
 | Nome                | Função            | GitHub                                                                 |
 |---------------------|-------------------|------------------------------------------------------------------------|
-| Guilherme Teixeira  | Hardware / ESP32  | [GuilhermeTeixeira](https://github.com/GuilhermeCardoso0)              |
-| Rafael Soares       | Backend / Node.js | [RafaelSoares](https://github.com/RafaelSM21)                        |
-| Lucas Assis       | Backend / Node.js | [Lucasassis](https://github.com/Lucassis3)                        |
+| Guilherme Teixeira  | Hardware / ESP32  | [GuilhermeCardoso0](https://github.com/GuilhermeCardoso0)              |
+| Rafael Soares       | Backend / Node.js | [RafaelSM21](https://github.com/RafaelSM21)                        |
+| Lucas Assis         | Backend / Node.js | [Lucassis3](https://github.com/Lucassis3)                        |
 
 ---
 
