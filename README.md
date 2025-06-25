@@ -68,6 +68,10 @@ O Projeto Telégrafo utiliza o microcontrolador ESP32 e três botões físicos p
 - PostgreSQL 14+  
 - Mosquitto MQTT Broker (`sudo apt install mosquitto`)  
 
+### 🧭 Diagrama de Arquitetura
+
+<img src="./arquitetura.jpg" alt="Diagrama de Arquitetura do Projeto" />
+
 ### Circuito ESP32
 
 - 3 botões conectados aos pinos GPIO 12, 14 e 27  
