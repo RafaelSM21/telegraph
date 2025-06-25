@@ -1,0 +1,17 @@
+body {
+  font-family: monospace;
+  background: #f5f5f5;
+  padding: 20px;
+}
+h1 {
+  margin-bottom: 10px;
+}
+table {
+  background: white;
+  border-collapse: collapse;
+  width: 100%;
+}
+th {
+  background: #222;
+  color: white;
+}

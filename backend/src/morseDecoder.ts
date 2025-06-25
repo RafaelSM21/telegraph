@@ -9,11 +9,8 @@ const MORSE_TABLE: Record<string, string> = {
   "----.": "9"
 };
 
-function morseToText(morse: string): string {
-  const letters = morse.trim().match(/(\.|-)+/g);
-  if (!letters) return "";
-
-  return letters.map(code => MORSE_TABLE[code] || "").join("");
+export function decodeMorse(morse: string): string {
+  return morse.trim().split(" | ").map(word =>
+    word.split(" ").map(code => MORSE_TABLE[code] || '?').join('')
+  ).join(' ');
 }
-
-export { morseToText };
